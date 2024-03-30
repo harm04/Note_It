@@ -1,8 +1,11 @@
 import 'dart:ffi';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:note_it/methods/firestoreMethods.dart';
+import 'package:uuid/uuid.dart';
 
 class AddNotes extends StatefulWidget {
   const AddNotes({super.key});
@@ -12,6 +15,7 @@ class AddNotes extends StatefulWidget {
 }
 
 class _AddNotesState extends State<AddNotes> {
+  FirebaseAuth _auth = FirebaseAuth.instance  ;
   TextEditingController titlecontroller = TextEditingController();
 TextEditingController descriptioncontroller = TextEditingController();
 
@@ -22,6 +26,7 @@ TextEditingController descriptioncontroller = TextEditingController();
   titlecontroller.dispose();
   descriptioncontroller.dispose();
   }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +40,10 @@ TextEditingController descriptioncontroller = TextEditingController();
         ),
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+            String  noteid=  Uuid().v1();
+                FirestoreMethods().addNotes(titlecontroller.text, descriptioncontroller.text, noteid);
+              },
               child: const Text(
                 'Save',
                 style: TextStyle(color: Colors.blue, fontSize: 20),
